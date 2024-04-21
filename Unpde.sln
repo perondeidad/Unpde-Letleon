@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unpde", "Unpde.csproj", "{BA051EF3-F937-453A-9B75-1C48E85D8418}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA051EF3-F937-453A-9B75-1C48E85D8418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA051EF3-F937-453A-9B75-1C48E85D8418}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA051EF3-F937-453A-9B75-1C48E85D8418}.Debug|x86.ActiveCfg = Debug|x86
+		{BA051EF3-F937-453A-9B75-1C48E85D8418}.Debug|x86.Build.0 = Debug|x86
+		{BA051EF3-F937-453A-9B75-1C48E85D8418}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA051EF3-F937-453A-9B75-1C48E85D8418}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA051EF3-F937-453A-9B75-1C48E85D8418}.Release|x86.ActiveCfg = Release|x86
+		{BA051EF3-F937-453A-9B75-1C48E85D8418}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD8CEBE5-0A12-43F3-B2F7-2F04BC76DB9D}
+	EndGlobalSection
+EndGlobal
