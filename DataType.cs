@@ -1,6 +1,9 @@
 using Newtonsoft.Json;
 
 namespace Unpde {
+    /// <summary>
+    /// 数据类型定义
+    /// </summary>
     public static class DataType {
         /// <summary>
         /// 170数据块结构
@@ -47,13 +50,18 @@ namespace Unpde {
             /// </summary>
             public required string Name { get; set; }
             /// <summary>
-            /// 偏移值
+            /// 在PDE文件中的实际偏移值
             /// </summary>
             public required uint Offset { get; set; }
             /// <summary>
             /// 大小
             /// </summary>
             public required uint Size { get; set; }
+            /// <summary>
+            /// 原始偏移值
+            /// </summary>
+            public required uint OOffset { get; set; }
+
         }
 
         /// <summary>
@@ -100,10 +108,62 @@ namespace Unpde {
             public required byte[] Byte { get; set; }
         }
 
+        /// <summary>
+        /// PDE文件名结构
+        /// </summary>
         public class PdeNames {
+            /// <summary>
+            /// 文件名
+            /// </summary>
             public required string Name { get; set; }
+            /// <summary>
+            /// 文件全名
+            /// </summary>
             public required string FullName { get; set; }
         }
 
+        /// <summary>
+        /// 解码后的JSON数据目录结构
+        /// </summary>
+        public class DecodedDirJson {
+            /// <summary>
+            /// 文件或文件夹类型
+            /// </summary>
+            public required int Type { get; set; }
+            /// <summary>
+            /// 文件或文件夹名称
+            /// </summary>
+            public required string Name { get; set; }
+            /// <summary>
+            /// 数据块在PDE文件中的偏移值
+            /// </summary>
+            public required string BOffset { get; set; }
+            /// <summary>
+            /// 原始偏移值
+            /// </summary>
+            public required string OOffset { get; set; }
+            /// <summary>
+            /// 真实偏移值
+            /// </summary>
+            public required string Offset { get; set; }
+            /// <summary>
+            /// 大小
+            /// </summary>
+            public required string Size { get; set; }
+        }
+
+        /// <summary>
+        /// 未解码的目录结构
+        /// </summary>
+        public class UnDecodedDir {
+            /// <summary>
+            /// 文件或文件夹类型
+            /// </summary>
+            public required long OffSet { get; set; }
+            /// <summary>
+            /// 大小
+            /// </summary>
+            public required long Size { get; set; }
+        }
     }
 }
