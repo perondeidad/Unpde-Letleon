@@ -13,15 +13,12 @@
             ],
             "problemMatcher": "$msCompile"
         },
-        {{
-    "version": "2.0.0",
-    "tasks": [
         {
-            "label": "build",
+            "label": "publish",
             "command": "dotnet",
             "type": "process",
             "args": [
-                "build",
+                "publish",
                 "${workspaceFolder}/Unpde.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
@@ -29,3 +26,16 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "--project",
+                "${workspaceFolder}/Unpde.sln"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
