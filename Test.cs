@@ -38,7 +38,7 @@ namespace Unpde {
             uint ESP58;
 
             // 读取 Unpde/目录下的初次解密出来的文件来测试
-            string filePath = @"Unpde\27B85000_7A739_lb_bg_manage01.dds.cache";
+            string filePath = @"zh_cn.lua.cache";
             // 这个文件会出错
             //Unpde\mesh\prop\weapon\bazookas\107AB000_AE848_bazookas_d.dds.cache
 
@@ -223,6 +223,36 @@ namespace Unpde {
                 }
             }
             Console.WriteLine(" ！Json解析完成");
+        }
+
+        /// <summary>
+        /// 生成 PDEKEY
+        /// </summary>
+        public static void MakeKey() {
+            // 逻辑从 汇编 0x00A608E0  处获得
+            uint EAX = 0x42574954;
+
+            // PDEKEY
+            byte[] KeyByte = new byte[0x1000];
+
+            for (int i = 0; i < 0x1000; i++) {
+                EAX *= 0x7FCF;
+                uint ECX = EAX;
+                ECX >>= 0x18;
+                uint EDX = EAX;
+                EDX >>= 0x10;
+                byte CL = (byte)((byte)ECX ^ (byte)EDX);
+                EDX = EAX;
+                EDX >>= 0x8;
+                CL = (byte)(CL ^ (byte)EDX);
+                CL = (byte)(CL ^ (byte)EAX);
+                KeyByte[i] = CL;
+            }
+
+            // 打印 KeyByte
+            for (int i = 0; i < 0x1000; i += 0x10) {
+                Console.WriteLine(BitConverter.ToString(KeyByte, i, 0x10));
+            }
         }
     }
 }

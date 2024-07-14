@@ -14,6 +14,9 @@ namespace Unpde {
         /// <summary>
         /// 检查
         /// </summary>
+        /// <param name="Type">类型</param>
+        /// <param name="Name">名称</param>
+        /// <returns>是否合法</returns>
         public static bool Check(uint Type, string Name) {
             bool Result = false;
             if (Type == 1) {
@@ -26,7 +29,11 @@ namespace Unpde {
             return Result;
         }
 
-        // 检查文件名是否合法  
+        /// <summary>
+        /// 检查文件名是否合法
+        /// </summary>
+        /// <param name="fileName">文件名 </param>
+        /// <returns>是否合法 </returns>
         private static bool FileNmae(string fileName) {
             // 文件名不能为空  
             if (string.IsNullOrWhiteSpace(fileName))
@@ -52,7 +59,11 @@ namespace Unpde {
             return true;
         }
 
-        // 检查文件夹名是否合法  
+        /// <summary>
+        /// 检查文件夹名是否合法
+        /// </summary>
+        /// <param name="dirName">文件夹名 </param>
+        /// <returns>是否合法 </returns>
         private static bool DirectoryName(string dirName) {
             // 文件夹名不能为空  
             if (string.IsNullOrWhiteSpace(dirName))

@@ -1,10 +1,14 @@
 using static Unpde.DataType;
 
 namespace Unpde {
+    /// <summary>
+    /// 获取当前目录下的所有.pde文件名
+    /// </summary>
     internal class GetPDEList {
         /// <summary>
         /// 获取当前目录下的所有.pde文件名
         /// </summary>
+        /// <returns>返回.pde文件名列表</returns>
         public static List<PdeNames> Get() {
             List<PdeNames> pdeList = [];
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.pde");

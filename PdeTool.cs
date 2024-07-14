@@ -1,5 +1,6 @@
 using System.Text;
 using static Unpde.DataType;
+using static Program;
 
 namespace Unpde {
 
@@ -9,14 +10,16 @@ namespace Unpde {
     public static class PdeTool {
 
         /// <summary>
-        /// PDED大小
+        /// PDE大小
         /// </summary>
         private static uint PDESIZE;
 
         /// <summary>
-        /// 获取PDE文件大小
+        /// 获取PDE大小
         /// </summary>
-        public static uint GetPdeSize => PDESIZE;
+        public static uint PdeSize {
+            get { return PDESIZE; }
+        }
 
         /// <summary>
         /// PDEKEY
@@ -26,20 +29,28 @@ namespace Unpde {
         /// <summary>
         /// 当前PDE文件全名 
         /// </summary>
-        public static PdeNames ThisPde = new() { Name = "", FullName = "" };
+        private static PdeNames THISPDENAME = new() { Name = "", FullName = "" };
+
+        /// <summary>
+        /// 获取当前PDE文件名称
+        /// </summary>
+        public static PdeNames ThisPdeName {
+            get { return THISPDENAME; }
+        }
 
         /// <summary>
         /// 初始化PDE工具类
         /// </summary>
+        /// <param name="PdeList">当前目录下的PDE资源文件</param>
         public static void Init(PdeNames PdeList) {
             Console.WriteLine(" ！初始化PDE工具类");
 
             // 当前目录下的PDE资源文件
-            ThisPde = PdeList;
+            THISPDENAME = PdeList;
 
             // 读取PDEFILE文件,如果不存在则退出
-            if (!File.Exists(ThisPde.FullName)) {
-                Console.WriteLine(" ！目录下没有找到 " + ThisPde + " 文件");
+            if (!File.Exists(THISPDENAME.FullName)) {
+                Console.WriteLine(" ！目录下没有找到 " + THISPDENAME + " 文件");
                 // 退出程序
                 Environment.Exit(0);
             }
@@ -50,10 +61,12 @@ namespace Unpde {
             }
 
             // 获取PDEKEY
-            PDEKEY = PdeKey.PDEKEY;
+            if (PDEKEY.Length == 0) {
+                PDEKEY = PdeKey.PDEKEY();
+            }
 
             // 获取PDESIZE
-            using var pdeFileStream = File.OpenRead(ThisPde.FullName);
+            using var pdeFileStream = File.OpenRead(THISPDENAME.FullName);
             PDESIZE = (uint)pdeFileStream.Length;
 
             Console.WriteLine(" √ 成功初始化PDE工具类");
@@ -62,7 +75,10 @@ namespace Unpde {
         /// <summary>
         /// 获取文件或文件夹偏移信息
         /// </summary>
-        public static List<HexOffsetInfo> GetOffsetInfo(byte[] data) {
+        /// <param name="data">初次解密后的数据</param>
+        /// <param name="BlockOffset">数据块在PDE文件中的偏移值</param>
+        /// <returns>文件或文件夹的偏移信息数组 </returns>
+        public static List<HexOffsetInfo> GetOffsetInfo(byte[] data, uint BlockOffset) {
             // 源程序 放入表头 + 最后4个地址 + 文件类型 + 文件名（1B*4=6c = 108）
             //Console.WriteLine(" ！开始获取文件在PDE中的偏移信息");
             //Console.WriteLine(" 获取偏移传入数据大小: " + data.Length);
@@ -84,13 +100,18 @@ namespace Unpde {
             List<HexOffsetInfo> OffsetInfoArr = [];
 
             // 循环获取偏移,大小,类型,文件名
-            foreach (byte[] Block in BlockArr) {
+            for (int bi = 0; bi < BlockCount; bi++) {
+                byte[] Block = BlockArr[bi];
+                //}
+
+                //foreach (byte[] Block in BlockArr) {
                 // 新Info
                 HexOffsetInfo ThisInfo = new() {
                     Type = 0,
                     Name = "",
                     Offset = 0,
-                    Size = 0
+                    Size = 0,
+                    OOffset = 0,
                 };
 
                 // 读取类型 1==文件，2==目录
@@ -132,7 +153,8 @@ namespace Unpde {
                     // 复制名称
                     ThisInfo.Name = Encoding.ASCII.GetString(Block, 1, NonZeroIndex);
                     // 判断名称是否合法
-                    if (!NameValidator.Check(ThisInfo.Type, ThisInfo.Name)) break;
+                    if (!NameValidator.Check(ThisInfo.Type, ThisInfo.Name))
+                        break;
                 } else {
                     // 获取文件名出错
                     break;
@@ -146,24 +168,35 @@ namespace Unpde {
                 }
                 ThisInfo.Size = BitConverter.ToUInt32(ThisSize, 0);
 
-                // 读取偏移值 
+                // 读取原始偏移值 
                 byte[] ThisOffset = new byte[4];
                 Array.Copy(Block, Block.Length - 8, ThisOffset, 0, 4);
                 if (!BitConverter.IsLittleEndian) {
                     Array.Reverse(ThisOffset);
                 }
-                uint ThisOffsetUint = BitConverter.ToUInt32(ThisOffset, 0);
+                // 保存原始偏移值
+                ThisInfo.OOffset = BitConverter.ToUInt32(ThisOffset, 0);
 
                 // 计算实际偏移值
-                ThisInfo.Offset = ((ThisOffsetUint >> 10) + ThisOffsetUint + 1) << 12;
+                ThisInfo.Offset = ((ThisInfo.OOffset >> 10) + ThisInfo.OOffset + 1) << 12;
 
                 // 如果 ThisInfo.Offset 越界，则退出循环
                 if (ThisInfo.Offset >= PDESIZE) {
                     Console.Error.WriteLine(" ！ThisInfo.Offset 越界退出循环");
                     // 记录未知文件或目录的偏移到日志
-                    OffsetLog.Rec(ThisInfo.Offset, ThisInfo.Size, "未知文件名", ThisInfo.Type, ThisPde.Name + "/");
+                    if (GVar.NeedOffsetLog) {
+                        OffsetLog.Rec(BlockOffset, ThisInfo.Offset, ThisInfo.OOffset, ThisInfo.Size, "未知文件名", ThisInfo.Type, THISPDENAME.Name + "/");
+                    }
                     continue;
                 }
+
+                // 读取标识
+                uint TagOffSet = (uint)(BlockOffset + ((bi + 1) * 0x80) - 0xC);
+                GetOffsetStr ThisTag = GetByteOfPde(TagOffSet, 4);
+                // 打印 ThisTag.Byte
+                //Console.WriteLine(" ！ThisTag.Byte: " + BitConverter.ToString(ThisTag.Byte));
+                GVar.TagsHash.Add(BitConverter.ToString(ThisTag.Byte).Replace("-", ""));
+                //Console.WriteLine(" ！TagsHash长度: " + GVar.TagsHash.Count);
 
                 // 添加到OffsetInfoArr
                 OffsetInfoArr.Add(ThisInfo);
@@ -176,9 +209,12 @@ namespace Unpde {
         /// <summary>
         /// 从PDE文件中获取指定块数据
         /// </summary>
+        /// <param name="Start">块在PDE文件中的起始偏移</param>
+        /// <param name="Size">块大小</param>
+        /// <returns>块数据</returns>
         public static GetOffsetStr GetByteOfPde(uint Start, uint Size) {
             // 读取PDE文件  
-            using FileStream PDEFILE_FS = new(ThisPde.FullName, FileMode.Open);
+            using FileStream PDEFILE_FS = new(THISPDENAME.FullName, FileMode.Open);
 
             // 设置读取起点
             PDEFILE_FS.Position = Start;
@@ -220,6 +256,8 @@ namespace Unpde {
         /// <summary>
         /// 解密文件 或! 数据块
         /// </summary>
+        /// <param name="OffsetArr">文件或数据块的偏移信息数组</param>
+        /// <returns>解密后的数据</returns>
         public static byte[] DeFileOrBlock(byte[] OffsetArr) {
             // 当前临时解密字节数组
             byte[] TempDEArr;

@@ -1,7 +1,7 @@
-using System.Drawing;
 using static Unpde.DataType;
 using static Unpde.FinalUnpack;
 using static Unpde.PdeTool;
+using static Program;
 
 namespace Unpde {
     /// <summary>
@@ -15,7 +15,13 @@ namespace Unpde {
         /// <summary>
         /// 尝试解密
         /// </summary>
+        /// <param name="Offset">数据块在PDE文件中的偏移值</param>
+        /// <param name="Size">数据块大小</param>
+        /// <param name="Dir">目录</param>
+        /// <param name="Is170">是否为170表数据</param>
         public static void Try(uint Offset, uint Size, DirStr Dir, bool Is170) {
+            Console.WriteLine(" ！正在尝试解密: " + Dir.NowDir);
+
             // 定义变量
             GetOffsetStr TryByte;
             byte[] DeTryByte;
@@ -23,7 +29,8 @@ namespace Unpde {
                 // 读取数据
                 TryByte = GetByteOfPde(Offset, Size);
                 // 校验数据
-                if (TryByte.Size != Size) return;
+                if (TryByte.Size != Size)
+                    return;
                 // 解密数据块 -> 同时生成一个供调试时使用的PDE文件
                 DeTryByte = DeFileOrBlock(TryByte.Byte);
             } catch (Exception e) {
@@ -32,38 +39,49 @@ namespace Unpde {
             }
 
             //保存数据到DebugPde，调试时使用
-            //DebugPde.Rec(DeTryByte, Offset, Size, ThisPde.Name);
+            if (GVar.NeedDebugPde) {
+                DebugPde.Rec(DeTryByte, Offset, Size, ThisPdeName.Name);
+            }
 
             // 非170表数据
             if (!Is170) {
                 // 获取文件或文件夹偏移信息
-                List<HexOffsetInfo> DeTryByteArr = GetOffsetInfo(DeTryByte);
+                List<HexOffsetInfo> DeTryByteArr = GetOffsetInfo(DeTryByte, Offset);
                 // 读取并保存文件到硬盘
-                Save(DeTryByteArr, Dir);
+                Save(DeTryByteArr, Dir, Offset);
             }
         }
 
         /// <summary>
         /// 创建目录或文件
         /// </summary>
-        static void Save(List<HexOffsetInfo> DirOrFileArr, DirStr Dir) {
+        /// <param name="DirOrFileArr">文件或目录数组</param>
+        /// <param name="Dir">目录</param>
+        /// <param name="BlockOffset">数据块在PDE文件中的偏移值</param>
+        static void Save(List<HexOffsetInfo> DirOrFileArr, DirStr Dir, uint BlockOffset) {
             // 遍历目录或文件
             foreach (HexOffsetInfo DirOrFile in DirOrFileArr) {
                 //文件
                 if (DirOrFile.Type == 1) {
                     // 记录文件偏移信息
-                    OffsetLog.Rec(DirOrFile.Offset, DirOrFile.Size, DirOrFile.Name ?? "未知文件名", DirOrFile.Type, Dir.NowDir);
+                    if (GVar.NeedOffsetLog) {
+                        OffsetLog.Rec(BlockOffset, DirOrFile.Offset, DirOrFile.OOffset, DirOrFile.Size, DirOrFile.Name ?? "未知文件名", DirOrFile.Type, Dir.NowDir);
+                    }
                     //获取指定偏移的字节数据
                     GetOffsetStr TempFileByte = GetByteOfPde(DirOrFile.Offset, DirOrFile.Size);
                     // 校验数据
-                    if (TempFileByte.Size != DirOrFile.Size) break;
+                    if (TempFileByte.Size != DirOrFile.Size)
+                        break;
                     //解密数据
                     byte[] DeTempFileByte = DeFileOrBlock(TempFileByte.Byte);
                     //判断是否是空文件
-                    if (DeTempFileByte.Length == 0 || DirOrFile.Name == "" || DirOrFile.Name == null) break;
+                    if (DeTempFileByte.Length == 0 || DirOrFile.Name == "" || DirOrFile.Name == null)
+                        break;
 
                     //保存数据到DebugPde，调试时使用
-                    //DebugPde.Rec(DeTempFileByte, DirOrFile.Offset, DirOrFile.Size, ThisPde.Name);
+                    if (GVar.NeedDebugPde) {
+                        DebugPde.Rec(DeTempFileByte, DirOrFile.Offset, DirOrFile.Size, ThisPdeName.Name);
+                    }
 
                     // 二次解密
                     byte[] FinalByte;
@@ -76,6 +94,7 @@ namespace Unpde {
                     } else {
                         try {
                             // 二次解密
+                            //FinalByte = []; // 测试用
                             FinalByte = FinalDecrypt(DeTempFileByte, DirOrFile.Name);
                         } catch (Exception e) {
                             // 二次解密失败
@@ -92,6 +111,11 @@ namespace Unpde {
                         string SavePath = Dir.NowDir + FixName;
                         //保存文件,如果不存在则保存，存在则跳过
                         if (!File.Exists(SavePath)) {
+                            // 判断 SavePath 的目录是否存在
+                            if (!Directory.Exists(Dir.NowDir)) {
+                                Directory.CreateDirectory(Dir.NowDir);
+                            }
+                            // 保存文件
                             File.WriteAllBytes(SavePath, FinalByte);
                         } else {
                             //Console.WriteLine("二次解密成功->文件已存在:" + FixName);
@@ -103,6 +127,11 @@ namespace Unpde {
                         string SavePath = Dir.NowDir + FixName;
                         //保存文件,如果不存在则保存，存在则跳过
                         if (!File.Exists(SavePath)) {
+                            // 判断 SavePath 的目录是否存在
+                            if (!Directory.Exists(Dir.NowDir)) {
+                                Directory.CreateDirectory(Dir.NowDir);
+                            }
+                            // 保存文件
                             File.WriteAllBytes(SavePath, DeTempFileByte);
                         } else {
                             //Console.WriteLine("二次解密失败->文件已存在:" + FixName);
@@ -110,7 +139,9 @@ namespace Unpde {
                     }
                 } else if (DirOrFile.Type == 2) {// 目录
                     // 记录目录偏移信息
-                    OffsetLog.Rec(DirOrFile.Offset, DirOrFile.Size, DirOrFile.Name ?? "未知目录名", DirOrFile.Type, Dir.NowDir);
+                    if (GVar.NeedOffsetLog) {
+                        OffsetLog.Rec(BlockOffset, DirOrFile.Offset, DirOrFile.OOffset, DirOrFile.Size, DirOrFile.Name ?? "未知目录名", DirOrFile.Type, Dir.NowDir);
+                    }
 
                     // 这里仅获取目录下的文件，不创建目录!
                     // 拼接新目录路径

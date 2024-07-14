@@ -1,4 +1,7 @@
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Drawing;
 using static Unpde.DataType;
+using static Unpde.PdeTool;
 
 namespace Unpde {
     /// <summary>
@@ -36,7 +39,7 @@ namespace Unpde {
             // 循环解密 OFFSET170
             // 目的是将170表？写入到调试用PDE
             foreach (Table170 T170 in OFFSET170) {
-                DirStr Dir170 = new() { UpDir = "Unpde/", NowDir = "Unpde/" };
+                DirStr Dir170 = new() { UpDir = ThisPdeName.Name + "/", NowDir = ThisPdeName.Name + "/" };
                 // True == 170表， False == 非170表
                 Unpack.Try(T170.Offset, T170.Size, Dir170, true);
             }
@@ -102,11 +105,12 @@ namespace Unpde {
         /// </summary>
         static void Save170() {
             try {
+                string JsonFilePath = Path.Combine(ThisPdeName.Name, "170.json");
                 // 使用  Newtonsoft.Json 将 TEMP170LOG 转换成 json 格式，保存到 Unpde/170.json 文件中
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(TEMP170LOG);
-                File.WriteAllText("Unpde/170.json", json);
+                File.WriteAllText(JsonFilePath, json);
             } catch (Exception ex) {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("保存170表失败！" + ex.Message);
             }
         }
     }
