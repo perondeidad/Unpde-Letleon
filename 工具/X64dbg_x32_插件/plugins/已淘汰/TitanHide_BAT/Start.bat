@@ -1,2 +1,0 @@
-sc start TitanHide
-pause
