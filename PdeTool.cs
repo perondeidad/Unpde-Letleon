@@ -257,15 +257,16 @@ namespace Unpde {
         /// 解密文件 或! 数据块
         /// </summary>
         /// <param name="OffsetArr">文件或数据块的偏移信息数组</param>
+        /// <param name="FixSize">是否修正大小</param>
         /// <returns>解密后的数据</returns>
-        public static byte[] DeFileOrBlock(byte[] OffsetArr) {
+        public static byte[] DeFileOrBlock(byte[] OffsetArr, bool FixSize) {
             // 当前临时解密字节数组
             byte[] TempDEArr;
-            try {
+            if (FixSize) {
+                // todo: +0x4目的是为了不越位
+                TempDEArr = new byte[OffsetArr.Length + 0x4];
+            } else {
                 TempDEArr = new byte[OffsetArr.Length];
-            } catch (Exception e) {
-                Console.WriteLine(" ！创建临时解密字节数组失败: " + e.Message);
-                return [];
             }
             // Key长度
             int KeyLenght = PDEKEY.Length - 1;

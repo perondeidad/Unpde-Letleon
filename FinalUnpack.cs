@@ -10,10 +10,6 @@ namespace Unpde {
         /// <param name="DeTempFileByte">需要二次解密的初次解密后的字节数组</param>
         /// <returns>解密后的字节数组</returns>
         public static byte[] FinalDecrypt2(byte[] DeTempFileByte) {
-            // TODO:这个函数不完善，存在越位问题！
-
-            // 待解密数据
-            byte[] EncryptedData;
             // 解密后数据
             byte[] DecryptedData;
             // 读取字节规则
@@ -38,40 +34,22 @@ namespace Unpde {
 
             // 解码后大小标识
             byte SizeFlag = DeTempFileByte[0x18];
-            //Console.WriteLine(" ！SizeFlag:" + SizeFlag.ToString("X"));
 
             // 根据标识设置偏移值
-            switch (SizeFlag.ToString("X")) {
-                case "6F":// 常规文件? 6F 标识
-                          // 获取解密后数据长度
-                    ESP58 = BitConverter.ToUInt32(DeTempFileByte, 0x1D);
-                    // 初始化EncryptedData大小
-                    EncryptedData = new byte[DeTempFileByte.Length - 0x21];
-                    // 从 0x21 开始到 结束 复制到 EncryptedData
-                    Array.Copy(DeTempFileByte, 0x21, EncryptedData, 0, EncryptedData.Length);
-                    break;
-                case "6D":// 非常规文件? 6D 标识
-                          // 获取解密后数据长度
-                    ESP58 = DeTempFileByte[0x1A];
-                    // 初始化EncryptedData大小
-                    EncryptedData = new byte[DeTempFileByte.Length - 0x1B];
-                    // 从 0x1A 开始到 结束 复制到 EncryptedData
-                    Array.Copy(DeTempFileByte, 0x1B, EncryptedData, 0, EncryptedData.Length);
-                    break;
-                default:
-                    // 未知文件类型
-                    throw new Exception(" ！解码后大小标识");
-            }
+            byte[] EncryptedData;
+            (ESP58, EncryptedData) = SizeFlag switch {
+                0x6F => (BitConverter.ToUInt32(DeTempFileByte, 0x1D), DeTempFileByte[0x21..]),
+                0x6D => (DeTempFileByte[0x1A], DeTempFileByte[0x1B..]),
+                _ => throw new Exception("未知的解码后大小标识")
+            };
 
-            //初始化解密后数据
+            // 初始化解密后数据
             DecryptedData = new byte[ESP58];
 
             // 逻辑开始
-            EDI = ESP58 - 1;
+            EDI = ESP58;
             ESP10 = EDI;
             EAX = EBX;
-
-            //Console.WriteLine(" ！正在二次解密...");
 
             try {
                 // 循环中要使用的本地函数
@@ -99,17 +77,12 @@ namespace Unpde {
                         ESI += 4;
                     }
 
-                    // TODO:会越界！实际上已经解码完成了！
-                    //if (SizeFlag == 0x6D) {
-                    //    if (EncryptedData.Length - (int)ESI >= 4) {
-                    //        ECX = BitConverter.ToUInt32(EncryptedData, (int)ESI);
-                    //    } else {
-                    //        Console.WriteLine(" ！越界了，返回解码数据！！！！");
-                    //        return DecryptedData;
-                    //    }
-                    //} else {
+                    // 优化越界检查
+                    if (ESI + 4 > EncryptedData.Length) {
+                        Console.WriteLine("解码完成，返回解码数据");
+                        break;
+                    }
                     ECX = BitConverter.ToUInt32(EncryptedData, (int)ESI);
-                    //}
 
                     if (((byte)EBX & (byte)EAX) != 0) {
                         EAX >>= 1;
@@ -197,16 +170,12 @@ namespace Unpde {
                     } while (EBP < EDI);
                 }
 
-                // 删除 DecryptedData 前8个字节
-                Array.Copy(DecryptedData, 8, DecryptedData, 0, DecryptedData.Length - 8);
-                Array.Resize(ref DecryptedData, DecryptedData.Length - 8);
-
-                // 返回
-                //Console.WriteLine("√二次解密完成！");
-                return DecryptedData;
+                // 优化删除前8个字节的操作
+                return DecryptedData[8..];
             } catch (Exception ex) {
-                Console.WriteLine(" ！异常：" + ex.Message);
-                return DecryptedData;
+                Console.WriteLine($"异常：{ex.Message}");
+                // 异常也返回解密后数据
+                return DecryptedData[8..];
             }
         }
 
@@ -217,20 +186,19 @@ namespace Unpde {
         /// <param name="FileName">文件名</param>
         /// <returns>解密后的字节数组</returns>
         public static byte[] FinalDecrypt(byte[] DeTempFileByte, string FileName) {
-            Console.WriteLine("正在二次解密的文件名: " + FileName);
-            byte REG_AL = DeTempFileByte[0x18];
-            Console.WriteLine("REG_AL: 0x" + REG_AL.ToString("X2"));
-            if ((REG_AL & 1) != 0) {
-                return FinalDecrypt2(DeTempFileByte);
-            } else {
-                if (DeTempFileByte.Length <= 0x29) {
-                    throw new Exception("初次解密后的字节数组长度不足，无法删除前0x29个字节");
-                }
-                byte[] result = new byte[DeTempFileByte.Length - 0x29];
-                Array.Copy(DeTempFileByte, 0x29, result, 0, result.Length);
-                Console.WriteLine($"{FileName} 无需二次解密");
-                return result;
+            Console.WriteLine($"正在二次解密的文件名: {FileName}");
+            if (FileName == "ak47_sight.dds.cache") {
+                Console.WriteLine("🐞！ak47_sight.dds.cache");
             }
+
+            byte REG_AL = DeTempFileByte[0x18];
+            Console.WriteLine($"REG_AL: 0x{REG_AL:X2}");
+
+            return (REG_AL & 1) != 0
+                ? FinalDecrypt2(DeTempFileByte)
+                : DeTempFileByte.Length <= 0x29
+                    ? throw new Exception("初次解密后的字节数组长度不足，无法删除前0x29个字节")
+                    : DeTempFileByte[0x29..];
         }
     }
 }

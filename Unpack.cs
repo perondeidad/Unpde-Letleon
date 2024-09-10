@@ -10,7 +10,7 @@ namespace Unpde {
     internal class Unpack {
 
         // 暂时不参与二次解密的文件
-        private static readonly string[] PassArr = [".fsb", ".swf", ".ttf", "version", "language"];
+        //private static readonly string[] PassArr = [".fsb", ".swf", ".ttf", "version", "language"];
 
         /// <summary>
         /// 尝试解密
@@ -32,7 +32,7 @@ namespace Unpde {
                 if (TryByte.Size != Size)
                     return;
                 // 解密数据块 -> 同时生成一个供调试时使用的PDE文件
-                DeTryByte = DeFileOrBlock(TryByte.Byte);
+                DeTryByte = DeFileOrBlock(TryByte.Byte, false);
             } catch (Exception e) {
                 Console.WriteLine(" ！读取数据失败: " + e.Message);
                 return;
@@ -73,7 +73,7 @@ namespace Unpde {
                     if (TempFileByte.Size != DirOrFile.Size)
                         break;
                     //解密数据
-                    byte[] DeTempFileByte = DeFileOrBlock(TempFileByte.Byte);
+                    byte[] DeTempFileByte = DeFileOrBlock(TempFileByte.Byte, true);
                     //判断是否是空文件
                     if (DeTempFileByte.Length == 0 || DirOrFile.Name == "" || DirOrFile.Name == null)
                         break;
@@ -83,15 +83,17 @@ namespace Unpde {
                         DebugPde.Rec(DeTempFileByte, DirOrFile.Offset, DirOrFile.Size, ThisPdeName.Name);
                     }
 
+
                     // 二次解密
                     byte[] FinalByte;
                     // 修正名称
                     string FixName;
-                    // 跳过不参与二次解密的文件
-                    if (PassArr.Any(DirOrFile.Name.ToLower().Contains)) {
-                        Console.WriteLine(" ！跳过不参与二次解密文件: " + DirOrFile.Name);
-                        FinalByte = [];
-                    } else {
+
+                    bool HasCache = DirOrFile.Name.Contains(".cache");
+
+                    // 判断文件名是否包含.cache文件,与是否需要二次解密
+                    // 从而判断是否需要参与二次解密
+                    if (GVar.NeedSecondaryDecryption & HasCache) { // 需要二次解密
                         try {
                             // 二次解密
                             //FinalByte = []; // 测试用
@@ -101,6 +103,9 @@ namespace Unpde {
                             FinalByte = [];
                             //Console.WriteLine(" ！二次解密失败: " + e.Message);
                         }
+                    } else { // 不需要二次解密
+                        Console.WriteLine(" ！跳过不参与二次解密文件: " + DirOrFile.Name);
+                        FinalByte = [];
                     }
 
                     // 二次解密似乎是因为有些文件会有多个Size导致的！

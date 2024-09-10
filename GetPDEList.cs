@@ -22,6 +22,9 @@ namespace Unpde {
                 };
                 Console.WriteLine(" ！找到.pde文件：" + ThisPde.FullName);
                 pdeList.Add(ThisPde);
+
+                // 将PDE文件名保存到全局变量中
+                GVar.NowPdeName = ThisPde.Name;
             }
 
             // 如果没有找到.pde文件,则退出程序

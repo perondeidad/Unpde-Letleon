@@ -2,20 +2,17 @@
 
 # Unpde 解密 .PDE 文件
 
-## 此仓库仅可用于学习目的，不可用于商业目的！
+## 此仓库仅可用于学习目的，不可用于商业目的
 
 ## 说明
 
-FC 版本:1.0.1.9920
-
-所有debug分析均来自此版本
-
-使用c#编写
+    FC 版本:1.0.1.9920
+    所有debug分析均来自此版本
+    使用c#编写
 
 ## C++版本 UnPdeC
 
 [UnPdeC](https://letleon.coding.net/public/3d/UnPdeC/git/files)
-
 
 ## 源码与二进制文件(不一定同步)
 
@@ -25,7 +22,7 @@ FC 版本:1.0.1.9920
 
 [123 云盘](https://www.123pan.com/s/b5Y0Vv-rN4J3.html)
 
-#### 测试程序
+## 测试程序
 
 [Unpde.exe](TestRelease/Unpde.exe)
 
@@ -33,17 +30,17 @@ FC 版本:1.0.1.9920
 
 [.NET8 运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0)
 
+## 目前状态
 
-请不要用于商业目的！
+    .lua .mesh .anim 等文件似乎是自定义格式!
+    最终解密函数存在越界问题！
+    可以自己查找未解密区域，但速度非常慢！
 
-#### 目前状态：
-.lua .mesh .anim 等文件似乎是自定义格式!
+## TODO
 
-最终解密函数存在越界问题！
-
-可以自己查找未解密区域，但速度非常慢！
-
-### TODO
+- [x] RF(一级戒备,极限火力)低版本无🐢！😺
+- [x] 似乎找到了解决最终解密时越位的问题！(还得验证)
+- [x] 找到了文件验证逻辑，并制作了验证程序
 - [x] 发现可以将.cache(未二解)文件都放到finalcombat.pde目录中，也能正常加载！
 - [x] 导出的mp3听起来怪怪的可以用工具再次转码成mp3即可解决！
 - [ ] 发现最终解密函数存在越界问题！
@@ -90,9 +87,9 @@ FC 版本:1.0.1.9920
 
 ---
 
-# Build
+## Build
 
-#### 准备:
+### 准备
 
 系统 windows10/11
 
@@ -100,7 +97,7 @@ FC 版本:1.0.1.9920
 
 打开源码，之后右键 管理解决方案的 NuGet 程序包,下载 Newtonsoft.Json v13.0.3
 
-#### 编译:
+### 编译
 
 首先你需要先 build 程序，然后会生成 Unpde\bin\x86\Debug\net8.0 目录
 
@@ -114,9 +111,9 @@ FC 版本:1.0.1.9920
 
 ---
 
-# 线索
+## 线索
 
-## Key 获取
+### Key 获取
 
 #### 手动获取
 
@@ -129,11 +126,12 @@ FC 版本:1.0.1.9920
 ![key](images/key.png)
 
 #### 函数生成
+
 在 00A608E0 处可以生成 KEY
 
 ![PdeKeyFun](images/PdeKeyFun.png)
 
-## 最终解密逻辑
+### 最终解密逻辑
 
 在 004CFA90 函数处
 将初次解码的文件数据 再次处理
@@ -145,12 +143,11 @@ FC 版本:1.0.1.9920
 
 ![D4.png](images/D4.png)
 
-## 文件偏移值与大小获取方法
+### 文件偏移值与大小获取方法
 
 ```
 文件偏移量
-  B8690200
-  即 000269B8 + 1 = 000269B9H
+  B8690200 -> 0x000269B8
   即可得到偏移量
   !在经过计算即可得到在PDE中的实际地址
 
@@ -160,7 +157,7 @@ FC 版本:1.0.1.9920
 
 ![offset1](images/offset1.jpg)
 
-## 文件与文件夹的标识以及块大小
+### 文件与文件夹的标识以及块大小
 
 ```
 🗂️ 文件夹 02
@@ -174,8 +171,13 @@ FC 版本:1.0.1.9920
 
 ---
 
-# 二次待解密数据分析
-### 6F
+### 二次待解密数据分析
+
+每个后缀为.cache的文件在0x18位置都会有一个标志位
+
+这个标志位目前观察到的作用是用来判断是否需要参与二次解密
+
+#### 6F
 
 ![6F](images/6F.png "6F")
 
@@ -191,7 +193,7 @@ FC 版本:1.0.1.9920
 	需要移除前8个字节
 ```
 
-### 6D
+#### 6D
 
 ![6D](images/6D.png "6D")
 
@@ -207,85 +209,52 @@ FC 版本:1.0.1.9920
 	需要移除前8个字节 ? 未验证！！！
 ```
 
-# Heads (初次解码后)
+## 引擎相关
 
-**Head 分析结果如下**
+在 FinalUnpack.FinalDecrypt2()方法最后，
 
-#### .lua
+为了方便预览，所以删除了解密后的前8个字节，
 
-010A0000 02000100
+但似乎这个前8个字节和游戏引擎有关！
 
-#### .anim
+![8byte.jpg](images/8byte.jpg)
 
-00050000 02000300
+## 文件验证
 
-#### .fsb
+从RF(极限火力，一级戒备，也是用了PDE的引擎)
 
-46534234
+中获得了文件验证的逻辑
 
-#### .tga / .dds
+放到了另一个仓库
 
-01020000 02000100
+[PDEVerify 控制台测试版本(需要自行修改源码)](https://letleon.coding.net/public/3d/PDEVerify/git/files)
 
-#### .dcl
+[PDEVerifyGUI GUI版本](https://letleon.coding.net/public/3d/PDEVerifyGUI/git/files)
 
-000C0000 02000200
+## DirStruct 附加的PDE文件目录结构
 
-#### .swf
+  (目前未完成)
+  附加的PDE文件目录结构,详情查看 [README.md](DirStruct/README.md)
 
-4357530A
+  目的是将全部文件都导出！
 
-#### .ttf
+  0x1000是根目录，按理来说只要从这里开始递归解密就可以获得全部文件
 
-00010000 00120100 00040020 44534947
+  但是，我的理解是，在游戏每次更新时，所有玩家都重新下载2G的PDE文件是不现实的
 
-#### .mesh
+  所以游戏的更新逻辑(猜测)是以追加的方式将新资源写入原来的pde尾部
 
-00010000 02000800
+  以这样的方式减少网络流量的压力，同时也减少了玩家的等待时间
 
-#### .occ
-
-010A0000 02000100
-
-#### .physx
-
-00070000 02000500
-
-#### .pd9
-
-02040000 02000300
-
-#### .vd9
-
-01040000 02000300
-
-#### .skel
-
-00060000 02000300
-
-#### .spr
-
-000D0000 02000000
-
-#### .vfx
-
-01020000 02000100
+  对于导出文件来说就比较困难了(😾)
 
 ---
 
-# 预览
+## 预览
 
-## 🎸 FSB 音乐文件播放器
+### 🎸 FSB 音乐文件播放器
 
-#### [~~foobar2000~~](https://www.foobar2000.org/download)
-
-~~需要用到这个老牌播放器
-[vgmstream decoder](https://www.foobar2000.org/components/view/foo_input_vgmstream)~~
-
-~~以及这个插件即可播放 FSB 音乐文件
-(但现在解出的资源不完整！！！)~~
-
-#### [FSB 提取器 16.10.21 (aezay.dk)](http://aezay.dk/aezay/fsbextractor/)
+[FSB 提取器 16.10.21 (aezay.dk)](http://aezay.dk/aezay/fsbextractor/)
 
 可正确识别 fsb 文件内的所有音频，以及可以提取音频
 
@@ -299,11 +268,6 @@ FC 版本:1.0.1.9920
 
 ---
 
-## 🖼️ DDS 预览
+### 🖼️ DDS 预览
 
-~~#### [Texture Tools Exporter | NVIDIA Developer](https://developer.nvidia.com/texture-tools-exporter)~~
-
-#### [TacentView](https://github.com/bluescan/tacentview)
-
-Git del repositorio original 
-https://e.coding.net/letleon/3d/Unpde.git
+[TacentView]([Tools/DDSView.html](https://github.com/bluescan/tacentview))

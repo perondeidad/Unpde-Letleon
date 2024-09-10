@@ -30,6 +30,16 @@ namespace Unpde {
         /// </summary>
         public static HashSet<string> TagsHash = [];
 
+        /// <summary>
+        /// 是否需要二次解密
+        /// 需要:完成二次解密，后缀删除.cache 
+        /// 不需要：不二次解密，直接输出原始文件,后缀带.cache
+        /// </summary>
+        public static bool NeedSecondaryDecryption = false;
 
+        /// <summary>
+        /// 当前正在处理的PDE文件名
+        /// </summary>
+        public static string NowPdeName = "";
     }
 }
