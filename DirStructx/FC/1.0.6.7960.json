@@ -1,0 +1,490 @@
+[
+    {
+        "UpDir": "/audio/",
+        "NowDir": "/audio/zh_CN",
+        "Offset": 256548864,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character/",
+        "NowDir": "/character/butcher_0",
+        "Offset": 262979584,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character/",
+        "NowDir": "/character/butcher_0",
+        "Offset": 263114752,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character/",
+        "NowDir": "/character/butcher_0",
+        "Offset": 263249920,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character/",
+        "NowDir": "/character/butcher_0",
+        "Offset": 263385088,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character/",
+        "NowDir": "/character/butcher_1",
+        "Offset": 263696384,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character/",
+        "NowDir": "/character/butcher_1",
+        "Offset": 263831552,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character/",
+        "NowDir": "/character/butcher_1",
+        "Offset": 263696384,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character/",
+        "NowDir": "/character/butcher_1",
+        "Offset": 263966720,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/",
+        "NowDir": "/character",
+        "Offset": 264216576,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/engineer_0",
+        "Offset": 264564736,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/engineer_0",
+        "Offset": 264699904,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/engineer_0",
+        "Offset": 264835072,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/engineer_1",
+        "Offset": 265080832,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/engineer_1",
+        "Offset": 265216000,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/engineer_1",
+        "Offset": 265351168,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/firebat_0",
+        "Offset": 265621504,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/firebat_0",
+        "Offset": 265756672,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/firebat_0",
+        "Offset": 265891840,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/firebat_0",
+        "Offset": 266027008,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/firebat_1",
+        "Offset": 266211328,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/firebat_1",
+        "Offset": 266346496,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/firebat_1",
+        "Offset": 266481664,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/firebat_1",
+        "Offset": 266616832,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/fireman_0",
+        "Offset": 266813440,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/fireman_0",
+        "Offset": 266948608,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/fireman_0",
+        "Offset": 267083776,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/fireman_0",
+        "Offset": 267218944,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/fireman_1",
+        "Offset": 267403264,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/fireman_1",
+        "Offset": 267538432,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/fireman_1",
+        "Offset": 267673600,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/fireman_1",
+        "Offset": 267808768,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/leader_0",
+        "Offset": 268357632,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/leader_0",
+        "Offset": 268492800,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/leader_0",
+        "Offset": 268627968,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/leader_0",
+        "Offset": 268767232,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/leader_1",
+        "Offset": 268943360,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/leader_1",
+        "Offset": 269078528,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/leader_1",
+        "Offset": 269213696,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/leader_1",
+        "Offset": 269348864,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/",
+        "NowDir": "/character",
+        "Offset": 269414400,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/nurse_0",
+        "Offset": 269553664,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/nurse_0",
+        "Offset": 269688832,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/nurse_0",
+        "Offset": 269824000,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/nurse_0",
+        "Offset": 269959168,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/nurse_1",
+        "Offset": 270131200,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/nurse_1",
+        "Offset": 270266368,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/nurse_1",
+        "Offset": 270401536,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/nurse_1",
+        "Offset": 270536704,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/officelady_0",
+        "Offset": 270721024,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/officelady_0",
+        "Offset": 270856192,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/officelady_0",
+        "Offset": 270991360,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/officelady_0",
+        "Offset": 271126528,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/officelady_1",
+        "Offset": 271314944,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/officelady_1",
+        "Offset": 271450112,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/officelady_1",
+        "Offset": 271585280,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/character",
+        "NowDir": "/character/officelady_1",
+        "Offset": 271720448,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/",
+        "NowDir": "/level",
+        "Offset": 294940672,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/",
+        "NowDir": "/level",
+        "Offset": 295161856,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/",
+        "NowDir": "/level",
+        "Offset": 295358464,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 312913920,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 324161536,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 340123648,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 350932992,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 363515904,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 377126912,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 390197248,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 402100224,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 411791360,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 425717760,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/firstperson",
+        "Offset": 437989376,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/thirdperson",
+        "Offset": 497876992,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/thirdperson",
+        "Offset": 558600192,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/thirdperson",
+        "Offset": 617635840,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/thirdperson",
+        "Offset": 694738944,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/thirdperson",
+        "Offset": 759103488,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/thirdperson",
+        "Offset": 809795584,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/thirdperson",
+        "Offset": 881164288,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/thirdperson",
+        "Offset": 934928384,
+        "Size": 4096
+    },
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/thirdperson",
+        "Offset": 984547328,
+        "Size": 4096
+    },
+
+    
+    {
+        "UpDir": "/mesh/character",
+        "NowDir": "/mesh/character/thirdperson",
+        "Offset": 437989376,
+        "Size": 4096
+    },
+]
